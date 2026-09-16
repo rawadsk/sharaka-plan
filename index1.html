@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>خطة الشراكة</title>
+<style>
+:root{
+  --bg:#0f172a; --card:#1e293b; --card2:#273449; --line:#334155;
+  --txt:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8;
+  --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444; --team:#a855f7;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',Tahoma,system-ui,sans-serif;
+  background:var(--bg); color:var(--txt); min-height:100vh; padding:16px}
+.app{max-width:1100px;margin:0 auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#38bdf8,#6366f1);
+  display:grid;place-items:center;font-size:24px}
+h1{font-size:20px}
+.muted{color:var(--muted);font-size:13px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.sync{display:flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;
+  background:var(--card);border:1px solid var(--line);border-radius:99px}
+.sync .sdot{width:9px;height:9px;border-radius:50%;background:var(--muted)}
+.sync.online .sdot{background:var(--ok);box-shadow:0 0 8px var(--ok)}
+.sync.offline .sdot{background:var(--bad)}
+.sync.saving .sdot{background:var(--warn);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.btn{background:var(--accent);color:#06263a;border:none;padding:9px 16px;border-radius:10px;
+  font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:.15s}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line);font-weight:500}
+.btn.ghost:hover{background:var(--card2)}
+.btn.sm{padding:6px 12px;font-size:12px}
+nav{display:flex;gap:6px;background:var(--card);padding:6px;border-radius:14px;margin-bottom:18px;overflow-x:auto}
+.tab{flex:1;min-width:90px;background:transparent;border:none;color:var(--muted);
+  padding:10px 8px;border-radius:10px;cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;transition:.15s;white-space:nowrap}
+.tab:hover{color:var(--txt)}
+.tab.active{background:var(--accent);color:#06263a}
+.view{display:none}
+.view.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+.card h2{font-size:15px;margin-bottom:12px;font-weight:700}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.card-head h2{margin:0}
+.goal{background:linear-gradient(135deg,#1e293b,#172033);border:1px solid var(--line);
+  border-radius:16px;padding:20px;margin-bottom:14px}
+.goal-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.goal h2{font-size:19px;margin-bottom:6px}
+.countdown{text-align:center;background:var(--card2);padding:10px 18px;border-radius:12px;min-width:100px}
+.countdown b{display:block;font-size:26px;color:var(--accent);line-height:1.1}
+.countdown span{font-size:11px;color:var(--muted)}
+.countdown.hot b{color:var(--bad)}
+.countdown.done b{color:var(--ok);font-size:18px}
+.bar{height:9px;background:#0b1220;border-radius:99px;overflow:hidden;margin-top:8px}
+.bar > div{height:100%;border-radius:99px;transition:width .4s ease}
+.bar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}
+.stat.team-stat{border-color:rgba(168,85,247,.5);
+  background:linear-gradient(135deg,rgba(168,85,247,.08),var(--card))}
+.stat .who{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.dot{width:12px;height:12px;border-radius:50%;flex:none}
+.stat .num{font-size:22px;font-weight:800}
+.stat .lbl{font-size:11px;color:var(--muted)}
+.stat-row{display:flex;gap:16px;margin-bottom:10px}
+.form-row{display:flex;gap:8px;flex-wrap:wrap}
+input,select,textarea{background:var(--card2);border:1px solid var(--line);color:var(--txt);
+  padding:10px 12px;border-radius:10px;font-family:inherit;font-size:14px;flex:1;min-width:130px}
+textarea{resize:vertical;min-height:60px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+input[type=date]{color-scheme:dark}
+input[type=color]{padding:2px;height:42px;min-width:60px;flex:none;cursor:pointer}
+select.team-opt{color:var(--team);font-weight:700}
+.row{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;
+  background:var(--card2);margin-bottom:8px;border:1px solid transparent;transition:.15s}
+.row:hover{border-color:var(--line)}
+.row.team-row{border-color:rgba(168,85,247,.35);
+  background:linear-gradient(135deg,rgba(168,85,247,.06),var(--card2))}
+.row .check{width:22px;height:22px;border-radius:7px;border:2px solid var(--line);
+  cursor:pointer;flex:none;display:grid;place-items:center;font-size:13px;transition:.15s}
+.row .check.doing{border-color:var(--warn);background:rgba(245,158,11,.15)}
+.row .check.done{border-color:var(--ok);background:var(--ok);color:#04210f}
+.row .body{flex:1;min-width:0;cursor:pointer}
+.row .title{font-size:14px;font-weight:600;word-break:break-word}
+.row.done .title{text-decoration:line-through;color:var(--muted)}
+.row .meta{font-size:11px;color:var(--muted);margin-top:3px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.badge{font-size:10px;padding:2px 8px;border-radius:99px;font-weight:700}
+.b-high{background:rgba(239,68,68,.15);color:#fca5a5}
+.b-mid{background:rgba(245,158,11,.15);color:#fcd34d}
+.b-low{background:rgba(148,163,184,.15);color:#cbd5e1}
+.b-late{background:rgba(239,68,68,.2);color:#fca5a5}
+.b-team{background:rgba(168,85,247,.2);color:#d8b4fe}
+.b-cmt{background:rgba(56,189,248,.15);color:#7dd3fc;cursor:pointer}
+.b-cmt:hover{background:rgba(56,189,248,.3)}
+.b-att{background:rgba(34,197,94,.15);color:#86efac;cursor:pointer}
+.b-att:hover{background:rgba(34,197,94,.3)}
+.x{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:18px;
+  padding:4px 8px;border-radius:8px;line-height:1}
+.x:hover{color:var(--bad);background:rgba(239,68,68,.1)}
+.learn-item{background:var(--card2);border-radius:12px;padding:14px;margin-bottom:10px}
+.learn-item.team-row{border:1px solid rgba(168,85,247,.35);
+  background:linear-gradient(135deg,rgba(168,85,247,.06),var(--card2))}
+.learn-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:4px}
+.learn-head .title{font-size:14px;font-weight:600}
+.learn-item input[type=range]{width:100%;accent-color:var(--accent);margin-top:10px;cursor:pointer}
+.empty{text-align:center;color:var(--muted);padding:28px;font-size:13px}
+
+/* Toasts */
+.toast-container{position:fixed;top:20px;left:50%;transform:translateX(-50%);
+  z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;
+  max-width:90%;width:400px}
+.toast{background:var(--card);border:1px solid var(--line);border-right:4px solid var(--accent);
+  padding:12px 16px;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.4);
+  animation:slideDown .3s ease;pointer-events:auto}
+.toast.success{border-right-color:var(--ok)}
+.toast.info{border-right-color:var(--accent)}
+.toast.warn{border-right-color:var(--warn)}
+.toast .t-title{font-weight:700;font-size:13px;margin-bottom:3px}
+.toast .t-body{font-size:12px;color:var(--muted)}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:10000;
+  display:none;align-items:center;justify-content:center;padding:16px}
+.modal-bg.show{display:flex}
+.modal{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  max-width:620px;width:100%;max-height:85vh;display:flex;flex-direction:column;overflow:hidden}
+.modal-head{padding:16px 20px;border-bottom:1px solid var(--line);display:flex;
+  justify-content:space-between;align-items:center;gap:12px}
+.modal-head h3{font-size:15px;font-weight:700;word-break:break-word}
+.modal-tabs{display:flex;gap:4px;padding:0 20px;border-bottom:1px solid var(--line);background:var(--card)}
+.modal-tab{background:transparent;border:none;color:var(--muted);padding:12px 16px;
+  cursor:pointer;font-family:inherit;font-size:13px;font-weight:600;
+  border-bottom:2px solid transparent;transition:.15s}
+.modal-tab:hover{color:var(--txt)}
+.modal-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.modal-body{padding:16px 20px;overflow-y:auto;flex:1;min-height:120px}
+.modal-foot{padding:12px 20px;border-top:1px solid var(--line);display:flex;gap:8px;flex-wrap:wrap}
+.modal-foot select{flex:0;min-width:110px;max-width:130px}
+.modal-foot input{flex:1}
+.comment{background:var(--card2);padding:10px 12px;border-radius:10px;margin-bottom:8px}
+.comment-head{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;gap:8px}
+.comment-author{font-weight:700}
+.comment-text{font-size:13px;line-height:1.6;word-break:break-word;white-space:pre-wrap}
+.comment-empty{text-align:center;color:var(--muted);padding:24px;font-size:13px}
+.attach-item{background:var(--card2);padding:12px;border-radius:10px;margin-bottom:8px;
+  display:flex;justify-content:space-between;align-items:center;gap:10px}
+.attach-info{flex:1;min-width:0}
+.attach-name{font-size:13px;font-weight:600;color:var(--accent);text-decoration:none;
+  word-break:break-word;display:block}
+.attach-name:hover{text-decoration:underline}
+.attach-meta{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* Calendar */
+.cal-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.cal-title{font-size:17px;font-weight:700;color:var(--accent)}
+.cal-nav{display:flex;gap:6px}
+.cal-nav button{background:var(--card2);border:1px solid var(--line);color:var(--txt);
+  width:36px;height:36px;border-radius:10px;cursor:pointer;font-size:18px;line-height:1;font-family:inherit}
+.cal-nav button:hover{background:var(--line)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-dow{text-align:center;font-size:11px;color:var(--muted);font-weight:700;padding:6px 0}
+.cal-cell{background:var(--card2);border-radius:8px;min-height:60px;padding:6px;
+  cursor:pointer;border:1px solid transparent;transition:.15s;position:relative;overflow:hidden}
+.cal-cell:hover{border-color:var(--accent)}
+.cal-cell.other{opacity:.3}
+.cal-cell.today{border-color:var(--accent);background:rgba(56,189,248,.1)}
+.cal-cell.selected{background:rgba(56,189,248,.2);border-color:var(--accent)}
+.cal-day-num{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:3px}
+.cal-cell.today .cal-day-num{color:var(--accent)}
+.cal-dots{display:flex;flex-wrap:wrap;gap:2px}
+.cal-dot{width:6px;height:6px;border-radius:50%}
+.cal-day-tasks{margin-top:14px}
+@media(max-width:500px){
+  .cal-cell{min-height:46px;padding:4px}
+  .cal-day-num{font-size:11px}
+  .tab{font-size:12px;padding:8px 4px;min-width:auto}
+}
+
+/* Report */
+.report-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-bottom:16px}
+.report-stat{background:var(--card2);border-radius:12px;padding:14px;text-align:center}
+.report-stat .num{font-size:24px;font-weight:800;color:var(--accent)}
+.report-stat .lbl{font-size:11px;color:var(--muted);margin-top:4px}
+.report-section{margin-top:20px}
+.report-section h3{font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">🚀</div>
+      <div>
+        <h1 id="hGoal">خطة الشراكة</h1>
+        <p class="muted" id="hSub">—</p>
+      </div>
+    </div>
+    <div class="actions">
+      <div class="sync" id="syncBadge">
+        <span class="sdot"></span>
+        <span id="syncTxt">جارٍ الاتصال...</span>
+      </div>
+      <button class="btn ghost" id="btnExport">⬇ تصدير</button>
+      <label class="btn ghost">⬆ استيراد<input type="file" id="fileImport" accept=".json" hidden></label>
+    </div>
+  </header>
+
+  <nav>
+    <button class="tab active" data-tab="dash">📊 اللوحة</button>
+    <button class="tab" data-tab="tasks">✅ المهام</button>
+    <button class="tab" data-tab="learn">📚 التعلم</button>
+    <button class="tab" data-tab="cal">📅 التقويم</button>
+    <button class="tab" data-tab="report">📊 التقرير</button>
+    <button class="tab" data-tab="team">👥 الفريق</button>
+  </nav>
+
+  <main>
+    <!-- Dashboard -->
+    <section id="dash" class="view active">
+      <div class="goal">
+        <div class="goal-top">
+          <div style="flex:1;min-width:220px">
+            <h2 id="dTitle">—</h2>
+            <p class="muted" id="dNote"></p>
+          </div>
+          <div class="countdown" id="dCount"><b>—</b><span>يوم متبقٍ</span></div>
+        </div>
+        <div class="bar-label"><span>التقدم الكلي نحو الهدف</span><b id="dPct">0%</b></div>
+        <div class="bar"><div id="dBar" style="width:0;background:linear-gradient(90deg,#38bdf8,#6366f1)"></div></div>
+      </div>
+      <div class="grid" id="dStats"></div>
+      <div class="card" style="margin-top:14px">
+        <h2>🔔 مهام قادمة أو متأخرة (7 أيام)</h2>
+        <div id="dUpcoming"></div>
+      </div>
+    </section>
+
+    <!-- Tasks -->
+    <section id="tasks" class="view">
+      <div class="card">
+        <h2>➕ إضافة مهمة</h2>
+        <div class="form-row">
+          <input id="tTitle" placeholder="عنوان المهمة..." style="flex:2">
+          <select id="tMember"></select>
+          <input type="date" id="tDue">
+          <select id="tPrio">
+            <option value="high">عالية</option>
+            <option value="mid" selected>متوسطة</option>
+            <option value="low">منخفضة</option>
+          </select>
+          <button class="btn" id="tAdd">إضافة</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <h2>📋 قائمة المهام</h2>
+          <div class="form-row" style="flex:0">
+            <select id="fMember" style="min-width:140px"></select>
+            <select id="fStatus" style="min-width:130px">
+              <option value="all">كل الحالات</option>
+              <option value="todo">لم تبدأ</option>
+              <option value="doing">جارية</option>
+              <option value="done">منتهية</option>
+            </select>
+          </div>
+        </div>
+        <div id="taskList"></div>
+      </div>
+    </section>
+
+    <!-- Learning -->
+    <section id="learn" class="view">
+      <div class="card">
+        <h2>➕ إضافة موضوع تعلّم</h2>
+        <div class="form-row">
+          <input id="lTitle" placeholder="مثال: أساسيات AWS..." style="flex:2">
+          <select id="lMember"></select>
+          <input type="date" id="lDue">
+          <button class="btn" id="lAdd">إضافة</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head">
+          <h2>📚 المواضيع</h2>
+          <select id="lFilter" style="min-width:150px;flex:0"></select>
+        </div>
+        <div id="learnList"></div>
+      </div>
+    </section>
+
+    <!-- Calendar -->
+    <section id="cal" class="view">
+      <div class="card">
+        <div class="cal-head">
+          <div class="cal-nav">
+            <button onclick="calNav(1)">‹</button>
+            <button onclick="calToday()">اليوم</button>
+            <button onclick="calNav(-1)">›</button>
+          </div>
+          <div class="cal-title" id="calTitle">—</div>
+        </div>
+        <div class="cal-grid" id="calDOW"></div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+      <div class="card">
+        <h2 id="calDayTitle">📋 مهام اليوم المحدد</h2>
+        <div id="calDayTasks"></div>
+      </div>
+    </section>
+
+    <!-- Report -->
+    <section id="report" class="view">
+      <div class="card">
+        <div class="card-head">
+          <h2>📊 التقرير الأسبوعي (آخر 7 أيام)</h2>
+          <button class="btn sm" onclick="copyReport()">📋 نسخ التقرير</button>
+        </div>
+        <div id="reportContent"></div>
+      </div>
+    </section>
+
+    <!-- Team -->
+    <section id="team" class="view">
+      <div class="card">
+        <h2>🎯 الهدف النهائي</h2>
+        <div class="form-row">
+          <input id="gTitle" placeholder="عنوان الهدف" style="flex:2">
+          <input type="date" id="gDate">
+        </div>
+        <div class="form-row" style="margin-top:8px">
+          <input id="gNote" placeholder="وصف مختصر...">
+        </div>
+      </div>
+      <div class="card">
+        <h2>👥 أعضاء الفريق</h2>
+        <div id="teamList"></div>
+      </div>
+      <div class="card">
+        <h2>🔔 الإشعارات</h2>
+        <p class="muted" style="line-height:2;margin-bottom:10px">
+          فعّل الإشعارات ليصلك تنبيه عند إضافة مهمة جديدة.
+        </p>
+        <button class="btn ghost" id="btnNotif">🔔 تفعيل إشعارات المتصفح</button>
+        <span id="notifStatus" class="muted" style="margin-right:10px"></span>
+      </div>
+      <div class="card">
+        <h2>ℹ️ معلومات</h2>
+        <p class="muted" style="line-height:2">
+          • 💬 انقر على أي مهمة → التعليقات والمرفقات.<br>
+          • 📅 تقويم شهري يعرض المهام حسب تاريخ الاستحقاق.<br>
+          • 📊 تقرير أسبوعي جاهز للنسخ والمشاركة.<br>
+          • معرف الغرفة: <code id="roomId" style="background:var(--card2);padding:2px 8px;border-radius:6px"></code>
+        </p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toast-container" id="toasts"></div>
+
+<!-- Task Modal (comments + attachments) -->
+<div class="modal-bg" id="cmtModal">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="cmtTitle">💬 المهمة</h3>
+      <button class="x" onclick="closeComments()">×</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" id="tabComments" onclick="switchCmtTab('comments')">💬 التعليقات</button>
+      <button class="modal-tab" id="tabAttachments" onclick="switchCmtTab('attachments')">📎 المرفقات</button>
+    </div>
+    <div class="modal-body" id="cmtBody"></div>
+    <div class="modal-foot" id="cmtFoot"></div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, set }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyALSDTloDzRWlAmAZKlobGf-HCR7diPw_U",
+  authDomain: "sharaka-plan.firebaseapp.com",
+  databaseURL: "https://sharaka-plan-default-rtdb.firebaseio.com",
+  projectId: "sharaka-plan",
+  storageBucket: "sharaka-plan.firebasestorage.app",
+  messagingSenderId: "776223335286",
+  appId: "1:776223335286:web:46ed1d2d1a08d8369d1057"
+};
+
+const ROOM = new URLSearchParams(location.search).get('room') || 'sharaka-team-2025';
+const $ = s => document.querySelector(s);
+
+const TEAM_ID = 'team';
+const TEAM_MEMBER = {id: TEAM_ID, name: 'الفريق كله', role: 'مشترك', color: '#a855f7'};
+
+function seed(){
+  return {
+    goal:{
+      title:'إطلاق شركتنا الهندسية الخاصة',
+      date: new Date(Date.now()+90*864e5).toISOString().slice(0,10),
+      note:'ثلاثة مهندسين → شراكة صغيرة → أول عميل → أول دخل'
+    },
+    members:[
+      {id:'m1', name:'أنا',      role:'مهندس', color:'#38bdf8'},
+      {id:'m2', name:'صديقي ١',  role:'مهندس', color:'#22c55e'},
+      {id:'m3', name:'صديقي ٢',  role:'مهندس', color:'#f59e0b'}
+    ],
+    tasks:[],
+    topics:[]
+  };
+}
+
+let state = seed();
+let db, planRef, saveTimer = null, isRemoteUpdate = false;
+
+let knownTaskIds  = new Set();
+let knownTopicIds = new Set();
+let firstLoad = true;
+const locallyAddedIds = new Set();
+
+const uid = () => Math.random().toString(36).slice(2,9);
+
+function mem(id){
+  if(id === TEAM_ID) return TEAM_MEMBER;
+  const list = Array.isArray(state.members) ? state.members : [];
+  return list.find(m => m.id === id) || {name:'—', color:'#64748b', role:''};
+}
+function daysLeft(d){
+  if(!d) return null;
+  const t = new Date(); t.setHours(0,0,0,0);
+  const x = new Date(d + 'T00:00:00');
+  return Math.round((x-t)/864e5);
+}
+function fmtDate(d){
+  if(!d) return 'بدون تاريخ';
+  return new Date(d + 'T00:00:00').toLocaleDateString('ar-EG',{day:'numeric', month:'short'});
+}
+function fmtTime(ts){
+  return new Date(ts).toLocaleString('ar-EG',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+}
+const PRIO_TXT = {high:'عالية', mid:'متوسطة', low:'منخفضة'};
+function esc(s){
+  return String(s ?? '').replace(/[&<>"']/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function ensureState(){
+  if(!state || typeof state !== 'object') state = seed();
+  if(!state.goal) state.goal = {title:'', date:'', note:''};
+  if(!Array.isArray(state.members) || !state.members.length) state.members = seed().members;
+  if(!Array.isArray(state.tasks))  state.tasks  = [];
+  if(!Array.isArray(state.topics)) state.topics = [];
+  state.tasks.forEach(t => {
+    if(!Array.isArray(t.comments))    t.comments    = objToArr(t.comments);
+    if(!Array.isArray(t.attachments)) t.attachments = objToArr(t.attachments);
+  });
+}
+function arrToObj(arr){
+  const o = {};
+  (arr || []).forEach(x => { if(x && x.id) o[x.id] = x; });
+  return o;
+}
+function objToArr(obj){
+  if(!obj) return [];
+  if(Array.isArray(obj)) return obj;
+  return Object.values(obj).filter(x => x && x.id);
+}
+
+/* Toasts */
+function showToast(title, body, type='info', timeout=5500){
+  const c = document.getElementById('toasts');
+  if(!c) return;
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = `<div class="t-title">${esc(title)}</div>
+                  ${body ? `<div class="t-body">${esc(body)}</div>` : ''}`;
+  c.appendChild(el);
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transition = 'opacity .3s';
+    setTimeout(() => el.remove(), 300);
+  }, timeout);
+}
+async function requestNotifPermission(){
+  if(!('Notification' in window)) return 'unsupported';
+  if(Notification.permission === 'granted') return 'granted';
+  if(Notification.permission === 'denied') return 'denied';
+  try{ return await Notification.requestPermission(); }catch(e){ return 'error'; }
+}
+function sendBrowserNotif(title, body){
+  if(!('Notification' in window)) return;
+  if(Notification.permission !== 'granted') return;
+  if(document.visibilityState === 'visible') return;
+  try{ new Notification(title, {body, icon:'🚀', tag:'sharaka-plan'}); }catch(e){}
+}
+function updateNotifStatus(){
+  const el = document.getElementById('notifStatus');
+  if(!el) return;
+  if(!('Notification' in window)){ el.textContent = '❌ غير مدعوم'; return; }
+  const p = Notification.permission;
+  el.textContent = p === 'granted' ? '✅ مفعلة' : p === 'denied' ? '❌ مرفوضة' : '⬜ غير مفعلة';
+}
+
+/* Firebase */
+function initFirebase(){
+  try{
+    const app = initializeApp(firebaseConfig);
+    db = getDatabase(app);
+    planRef = ref(db, 'rooms/' + ROOM);
+
+    onValue(ref(db, '.info/connected'), snap => {
+      const on = snap.val() === true;
+      const b = $('#syncBadge');
+      b.className = 'sync ' + (on ? 'online' : 'offline');
+      $('#syncTxt').textContent = on ? 'متزامن' : 'غير متصل';
+    });
+
+    onValue(planRef, snap => {
+      const data = snap.val();
+      if(!data || !data.members){
+        set(planRef, {
+          goal: seed().goal,
+          members: arrToObj(seed().members),
+          tasks: {},
+          topics: {}
+        });
+        return;
+      }
+
+      isRemoteUpdate = true;
+      data.members = objToArr(data.members);
+      data.tasks   = objToArr(data.tasks);
+      data.topics  = objToArr(data.topics);
+      state = data;
+      ensureState();
+
+      if(!firstLoad){
+        state.tasks.forEach(t => {
+          if(!knownTaskIds.has(t.id) && !locallyAddedIds.has(t.id)){
+            const m = mem(t.member);
+            showToast('✅ مهمة جديدة', `${t.title} — ${m.name}`, 'info');
+            sendBrowserNotif('✅ مهمة جديدة', `${t.title} — ${m.name}`);
+          }
+        });
+        state.topics.forEach(t => {
+          if(!knownTopicIds.has(t.id) && !locallyAddedIds.has(t.id)){
+            const m = mem(t.member);
+            showToast('📚 موضوع تعلم جديد', `${t.title} — ${m.name}`, 'info');
+            sendBrowserNotif('📚 موضوع تعلم', `${t.title} — ${m.name}`);
+          }
+        });
+      }
+      knownTaskIds  = new Set(state.tasks.map(t => t.id));
+      knownTopicIds = new Set(state.topics.map(t => t.id));
+      firstLoad = false;
+
+      renderAll();
+      if(currentCommentTaskId) renderModal();
+      isRemoteUpdate = false;
+    });
+  }catch(e){
+    console.error(e);
+    $('#syncBadge').className = 'sync offline';
+    $('#syncTxt').textContent = 'خطأ في الإعداد';
+  }
+}
+
+function save(){
+  if(isRemoteUpdate) return;
+  ensureState();
+  clearTimeout(saveTimer);
+  $('#syncBadge').className = 'sync saving';
+  $('#syncTxt').textContent = 'جارٍ الحفظ...';
+  saveTimer = setTimeout(async () => {
+    try{
+      const payload = {
+        goal: state.goal,
+        members: arrToObj(state.members),
+        tasks:   arrToObj(state.tasks),
+        topics:  arrToObj(state.topics)
+      };
+      await set(planRef, payload);
+    }catch(e){
+      console.error(e);
+      $('#syncBadge').className = 'sync offline';
+      $('#syncTxt').textContent = 'فشل الحفظ';
+    }
+  }, 300);
+}
+
+/* Navigation */
+document.querySelectorAll('.tab').forEach(b => {
+  b.onclick = () => {
+    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.view').forEach(x => x.classList.remove('active'));
+    b.classList.add('active');
+    $('#' + b.dataset.tab).classList.add('active');
+    if(b.dataset.tab === 'cal') renderCalendar();
+    if(b.dataset.tab === 'report') renderReport();
+  };
+});
+
+document.getElementById('btnNotif').onclick = async () => {
+  const p = await requestNotifPermission();
+  updateNotifStatus();
+  if(p === 'granted'){
+    showToast('🔔 تم تفعيل الإشعارات', 'ستصلك تنبيهات المهام الجديدة', 'success');
+    sendBrowserNotif('🔔 اختبار', 'الإشعارات تعمل بنجاح!');
+  } else if(p === 'denied'){
+    showToast('❌ تم رفض الإشعارات', 'فعّلها من إعدادات المتصفح', 'warn');
+  }
+};
+updateNotifStatus();
+
+/* Export/Import */
+$('#btnExport').onclick = () => {
+  ensureState();
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sharaka-plan-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+};
+$('#fileImport').onchange = e => {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const d = JSON.parse(r.result);
+      if(!d.members) throw 0;
+      d.members = objToArr(d.members);
+      d.tasks   = objToArr(d.tasks);
+      d.topics  = objToArr(d.topics);
+      state = d; ensureState(); save();
+      setTimeout(renderAll, 400);
+      alert('تم الاستيراد ✅');
+    }catch(err){ alert('ملف غير صالح ❌'); }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+};
+
+/* Selects */
+function fillSelects(){
+  ensureState();
+  const teamOpt = `<option value="${TEAM_ID}" class="team-opt">👥 الفريق كله</option>`;
+  const membersOpts = state.members.map(m =>
+    `<option value="${m.id}">${esc(m.name)}</option>`).join('');
+  const assignOpts = teamOpt + membersOpts;
+
+  const curT = $('#tMember').value, curL = $('#lMember').value;
+  $('#tMember').innerHTML = assignOpts;
+  $('#lMember').innerHTML = assignOpts;
+  if(curT && (curT === TEAM_ID || state.members.find(m => m.id === curT))) $('#tMember').value = curT;
+  if(curL && (curL === TEAM_ID || state.members.find(m => m.id === curL))) $('#lMember').value = curL;
+
+  const filterOpts = `<option value="all">عرض الكل</option>` + assignOpts;
+  const curF = $('#fMember').value, curLf = $('#lFilter').value;
+  $('#fMember').innerHTML = filterOpts;
+  $('#lFilter').innerHTML = filterOpts;
+  if(curF) $('#fMember').value = curF;
+  if(curLf) $('#lFilter').value = curLf;
+}
+
+/* Tasks */
+$('#tAdd').onclick = () => {
+  const title = $('#tTitle').value.trim();
+  if(!title) return $('#tTitle').focus();
+  ensureState();
+  const newId = uid();
+  locallyAddedIds.add(newId);
+  state.tasks.push({
+    id: newId, title,
+    member: $('#tMember').value,
+    due: $('#tDue').value,
+    prio: $('#tPrio').value,
+    status: 'todo',
+    comments: [],
+    attachments: [],
+    createdAt: Date.now(),
+    completedAt: null
+  });
+  $('#tTitle').value = ''; $('#tDue').value = '';
+  save(); renderAll();
+};
+$('#tTitle').addEventListener('keydown', e => { if(e.key === 'Enter') $('#tAdd').click(); });
+$('#fMember').onchange = $('#fStatus').onchange = () => renderTasks();
+
+window.cycle = function(id){
+  ensureState();
+  const t = state.tasks.find(x => x.id === id);
+  if(!t) return;
+  t.status = t.status === 'todo' ? 'doing' : t.status === 'doing' ? 'done' : 'todo';
+  if(t.status === 'done'){ if(!t.completedAt) t.completedAt = Date.now(); }
+  else t.completedAt = null;
+  save(); renderAll();
+};
+window.delTask = function(id){
+  if(!confirm('حذف هذه المهمة؟')) return;
+  ensureState();
+  state.tasks = state.tasks.filter(x => x.id !== id);
+  save(); renderAll();
+};
+
+function renderTasks(){
+  ensureState();
+  const fm = $('#fMember').value, fs = $('#fStatus').value;
+  let list = state.tasks.filter(t =>
+    (fm === 'all' || t.member === fm) && (fs === 'all' || t.status === fs)
+  );
+  const order = {todo:0, doing:1, done:2};
+  list.sort((a,b) => order[a.status] - order[b.status] ||
+                     (a.due || '9').localeCompare(b.due || '9'));
+
+  const box = $('#taskList');
+  if(!list.length){ box.innerHTML = '<div class="empty">لا توجد مهام هنا بعد 🌱</div>'; return; }
+
+  const icons = {todo:'', doing:'●', done:'✓'};
+  box.innerHTML = list.map(t => {
+    const isTeam = t.member === TEAM_ID;
+    const m = mem(t.member);
+    const dl = daysLeft(t.due);
+    const late = dl !== null && dl < 0 && t.status !== 'done';
+    const ccount = (t.comments||[]).length;
+    const acount = (t.attachments||[]).length;
+    return `
+      <div class="row ${t.status === 'done' ? 'done' : ''} ${isTeam ? 'team-row' : ''}">
+        <div class="check ${t.status}" onclick="cycle('${t.id}')">${icons[t.status] || ''}</div>
+        <div class="body" onclick="openComments('${t.id}')">
+          <div class="title">${esc(t.title)}</div>
+          <div class="meta">
+            <span style="color:${m.color}">${isTeam ? '👥' : '●'} ${esc(m.name)}</span>
+            <span>${fmtDate(t.due)}${dl !== null && t.status !== 'done'
+              ? (dl >= 0 ? ` (${dl} يوم)` : ` (متأخرة ${-dl} يوم)`) : ''}</span>
+            <span class="badge b-${t.prio}">${PRIO_TXT[t.prio] || ''}</span>
+            ${isTeam ? '<span class="badge b-team">مشتركة</span>' : ''}
+            ${late ? '<span class="badge b-late">متأخرة</span>' : ''}
+            <span class="badge b-cmt">💬 ${ccount}</span>
+            <span class="badge b-att">📎 ${acount}</span>
+          </div>
+        </div>
+        <button class="x" onclick="event.stopPropagation();delTask('${t.id}')">×</button>
+      </div>`;
+  }).join('');
+}
+
+/* Modal (comments + attachments) */
+let currentCommentTaskId = null;
+let cmtTab = 'comments';
+
+window.openComments = function(taskId){
+  ensureState();
+  const t = state.tasks.find(x => x.id === taskId);
+  if(!t) return;
+  currentCommentTaskId = taskId;
+  cmtTab = 'comments';
+  $('#cmtTitle').textContent = t.title;
+  $('#tabComments').classList.add('active');
+  $('#tabAttachments').classList.remove('active');
+  renderModal();
+  $('#cmtModal').classList.add('show');
+};
+window.closeComments = function(){
+  $('#cmtModal').classList.remove('show');
+  currentCommentTaskId = null;
+};
+window.switchCmtTab = function(tab){
+  cmtTab = tab;
+  $('#tabComments').classList.toggle('active', tab === 'comments');
+  $('#tabAttachments').classList.toggle('active', tab === 'attachments');
+  renderModal();
+};
+
+function renderModal(){
+  const t = state.tasks.find(x => x.id === currentCommentTaskId);
+  if(!t) return;
+  if(cmtTab === 'comments') renderCommentsSection(t);
+  else renderAttachmentsSection(t);
+}
+
+function renderCommentsSection(t){
+  const comments = Array.isArray(t.comments) ? t.comments : [];
+  const body = $('#cmtBody');
+  const foot = $('#cmtFoot');
+
+  if(!comments.length){
+    body.innerHTML = '<div class="comment-empty">لا توجد تعليقات بعد 💬</div>';
+  } else {
+    body.innerHTML = comments
+      .sort((a,b) => (a.time||0) - (b.time||0))
+      .map(c => {
+        const a = mem(c.author);
+        return `<div class="comment">
+          <div class="comment-head">
+            <span class="comment-author" style="color:${a.color}">${esc(a.name)}</span>
+            <span>${fmtTime(c.time)}</span>
+          </div>
+          <div class="comment-text">${esc(c.text)}</div>
+        </div>`;
+      }).join('');
+    body.scrollTop = body.scrollHeight;
+  }
+
+  const prevAuthor = localStorage.getItem('sharaka_author') || (state.members[0] && state.members[0].id) || '';
+  foot.innerHTML = `
+    <select id="cmtAuthor">
+      ${state.members.map(m =>
+        `<option value="${m.id}" ${m.id === prevAuthor ? 'selected' : ''}>${esc(m.name)}</option>`).join('')}
+      <option value="${TEAM_ID}" ${prevAuthor === TEAM_ID ? 'selected' : ''}>👥 الفريق كله</option>
+    </select>
+    <input id="cmtInput" placeholder="اكتب تعليقاً...">
+    <button class="btn" id="cmtSend">نشر</button>`;
+  $('#cmtSend').onclick = addComment;
+  $('#cmtInput').onkeydown = e => {
+    if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); addComment(); }
+  };
+  setTimeout(() => $('#cmtInput') && $('#cmtInput').focus(), 100);
+}
+
+window.addComment = function(){
+  const t = state.tasks.find(x => x.id === currentCommentTaskId);
+  if(!t) return;
+  const input = document.getElementById('cmtInput');
+  if(!input) return;
+  const text = input.value.trim();
+  if(!text) return;
+  const author = document.getElementById('cmtAuthor').value;
+  localStorage.setItem('sharaka_author', author);
+
+  if(!Array.isArray(t.comments)) t.comments = [];
+  t.comments.push({id: uid(), author, text, time: Date.now()});
+  input.value = '';
+  save();
+  renderCommentsSection(t);
+  renderTasks();
+};
+
+function renderAttachmentsSection(t){
+  const atts = Array.isArray(t.attachments) ? t.attachments : [];
+  const body = $('#cmtBody');
+  const foot = $('#cmtFoot');
+
+  if(!atts.length){
+    body.innerHTML = '<div class="comment-empty">لا توجد مرفقات 📎<br><span style="font-size:11px">أضف رابط ملف من Google Drive أو Dropbox أو أي رابط</span></div>';
+  } else {
+    body.innerHTML = atts.map(a => {
+      const u = mem(a.addedBy);
+      return `<div class="attach-item">
+        <div class="attach-info">
+          <a href="${esc(a.url)}" target="_blank" rel="noopener" class="attach-name">📎 ${esc(a.name)}</a>
+          <div class="attach-meta">أضافه ${esc(u.name)} · ${fmtTime(a.time)}</div>
+        </div>
+        <button class="x" onclick="delAttachment('${a.id}')">×</button>
+      </div>`;
+    }).join('');
+  }
+
+  foot.innerHTML = `
+    <input id="attName" placeholder="اسم الملف..." style="flex:1">
+    <input id="attUrl" placeholder="https://..." style="flex:2">
+    <button class="btn" id="attAdd">إضافة</button>`;
+  $('#attAdd').onclick = addAttachment;
+  $('#attUrl').onkeydown = e => { if(e.key === 'Enter') addAttachment(); };
+}
+
+window.addAttachment = function(){
+  const t = state.tasks.find(x => x.id === currentCommentTaskId);
+  if(!t) return;
+  const nameEl = document.getElementById('attName');
+  const urlEl  = document.getElementById('attUrl');
+  const name = nameEl.value.trim();
+  let url = urlEl.value.trim();
+  if(!url) return urlEl.focus();
+  if(!/^https?:\/\//i.test(url)) url = 'https://' + url;
+
+  const author = localStorage.getItem('sharaka_author') || (state.members[0] && state.members[0].id);
+  if(!Array.isArray(t.attachments)) t.attachments = [];
+  t.attachments.push({
+    id: uid(),
+    name: name || url.replace(/^https?:\/\//,'').slice(0,40),
+    url,
+    addedBy: author,
+    time: Date.now()
+  });
+  nameEl.value = ''; urlEl.value = '';
+  save();
+  renderAttachmentsSection(t);
+  renderTasks();
+};
+
+window.delAttachment = function(id){
+  const t = state.tasks.find(x => x.id === currentCommentTaskId);
+  if(!t) return;
+  if(!confirm('حذف هذا المرفق؟')) return;
+  t.attachments = t.attachments.filter(a => a.id !== id);
+  save();
+  renderAttachmentsSection(t);
+  renderTasks();
+};
+
+$('#cmtModal').addEventListener('click', e => {
+  if(e.target.id === 'cmtModal') closeComments();
+});
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape' && $('#cmtModal').classList.contains('show')) closeComments();
+});
+
+/* Learning */
+$('#lAdd').onclick = () => {
+  const title = $('#lTitle').value.trim();
+  if(!title) return $('#lTitle').focus();
+  ensureState();
+  const newId = uid();
+  locallyAddedIds.add(newId);
+  state.topics.push({
+    id: newId, title,
+    member: $('#lMember').value,
+    due: $('#lDue').value,
+    progress: 0,
+    createdAt: Date.now()
+  });
+  $('#lTitle').value = ''; $('#lDue').value = '';
+  save(); renderAll();
+};
+$('#lTitle').addEventListener('keydown', e => { if(e.key === 'Enter') $('#lAdd').click(); });
+$('#lFilter').onchange = () => renderLearn();
+
+window.setProgress = function(id, v){
+  ensureState();
+  const t = state.topics.find(x => x.id === id);
+  if(!t) return;
+  t.progress = +v;
+  const lbl = document.getElementById('pv-' + id);
+  if(lbl) lbl.textContent = v + '%';
+};
+window.commitProgress = function(){ save(); };
+window.delTopic = function(id){
+  if(!confirm('حذف هذا الموضوع؟')) return;
+  ensureState();
+  state.topics = state.topics.filter(x => x.id !== id);
+  save(); renderAll();
+};
+
+function renderLearn(){
+  ensureState();
+  const f = $('#lFilter').value;
+  const list = state.topics.filter(t => f === 'all' || t.member === f);
+  const box = $('#learnList');
+  if(!list.length){ box.innerHTML = '<div class="empty">أضف أول موضوع تعلم 📚</div>'; return; }
+
+  box.innerHTML = list.map(t => {
+    const isTeam = t.member === TEAM_ID;
+    const m = mem(t.member);
+    const p = +t.progress || 0;
+    const c = p >= 100 ? 'var(--ok)' : p >= 50 ? 'var(--accent)' : 'var(--warn)';
+    return `
+      <div class="learn-item ${isTeam ? 'team-row' : ''}">
+        <div class="learn-head">
+          <div>
+            <div class="title">${esc(t.title)}</div>
+            <div class="meta" style="font-size:11px;color:var(--muted);margin-top:3px">
+              <span style="color:${m.color}">${isTeam ? '👥' : '●'} ${esc(m.name)}</span>
+              ${isTeam ? '<span class="badge b-team" style="margin-right:6px">مشتركة</span>' : ''}
+              ${t.due ? ' · ' + fmtDate(t.due) : ''}
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px">
+            <b id="pv-${t.id}" style="color:${c};font-size:15px">${p}%</b>
+            <button class="x" onclick="delTopic('${t.id}')">×</button>
+          </div>
+        </div>
+        <input type="range" min="0" max="100" step="5" value="${p}"
+               oninput="setProgress('${t.id}', this.value)"
+               onchange="commitProgress()">
+      </div>`;
+  }).join('');
+}
+
+/* Team */
+function renderTeam(){
+  ensureState();
+  $('#gTitle').value = state.goal.title || '';
+  $('#gDate').value  = state.goal.date  || '';
+  $('#gNote').value  = state.goal.note  || '';
+
+  $('#teamList').innerHTML = state.members.map(m => `
+    <div class="form-row" style="margin-bottom:8px;align-items:center">
+      <span class="dot" style="background:${m.color};width:14px;height:14px"></span>
+      <input value="${esc(m.name)}" onchange="upMember('${m.id}','name',this.value)" placeholder="الاسم">
+      <input value="${esc(m.role)}" onchange="upMember('${m.id}','role',this.value)" placeholder="التخصص">
+      <input type="color" value="${m.color}" onchange="upMember('${m.id}','color',this.value)">
+    </div>
+  `).join('');
+
+  const roomEl = $('#roomId');
+  if(roomEl) roomEl.textContent = ROOM;
+}
+window.upMember = function(id, k, v){
+  ensureState();
+  const m = state.members.find(x => x.id === id);
+  if(m){ m[k] = v; save(); renderAll(); }
+};
+$('#gTitle').onchange = e => { state.goal.title = e.target.value; save(); renderDash(); };
+$('#gNote').onchange  = e => { state.goal.note  = e.target.value; save(); renderDash(); };
+$('#gDate').onchange  = e => { state.goal.date  = e.target.value; save(); renderDash(); };
+
+/* Dashboard */
+function overall(){
+  ensureState();
+  const ts = state.tasks.length;
+  const done = state.tasks.filter(t => t.status === 'done').length;
+  const tp = ts ? done / ts * 100 : 0;
+  const lp = state.topics.length
+    ? state.topics.reduce((s, t) => s + (+t.progress || 0), 0) / state.topics.length : 0;
+  if(ts === 0 && state.topics.length === 0) return 0;
+  return tp * 0.6 + lp * 0.4;
+}
+
+function renderDash(){
+  ensureState();
+  const g = state.goal;
+  $('#hGoal').textContent  = g.title || 'خطة الشراكة';
+  $('#dTitle').textContent = g.title || '—';
+  $('#dNote').textContent  = g.note  || '';
+  $('#hSub').textContent   = g.date ? 'الموعد النهائي: ' + fmtDate(g.date) : '';
+
+  const dl = daysLeft(g.date);
+  const c = $('#dCount');
+  c.className = 'countdown';
+  if(dl === null) c.innerHTML = '<b>—</b><span>بدون موعد</span>';
+  else if(dl < 0){ c.classList.add('done'); c.innerHTML = '<b>انتهى الموعد</b><span>حدّث التاريخ</span>'; }
+  else { if(dl <= 14) c.classList.add('hot'); c.innerHTML = `<b>${dl}</b><span>يوم متبقٍ</span>`; }
+
+  const p = Math.round(overall());
+  $('#dPct').textContent = p + '%';
+  $('#dBar').style.width = p + '%';
+
+  const teamTasks = state.tasks.filter(t => t.member === TEAM_ID);
+  const teamDone  = teamTasks.filter(t => t.status === 'done').length;
+  const teamTopics = state.topics.filter(t => t.member === TEAM_ID);
+  const teamTopicProg = teamTopics.length
+    ? Math.round(teamTopics.reduce((s,t) => s + (+t.progress||0), 0)/teamTopics.length) : 0;
+  const hasTeam = teamTasks.length > 0 || teamTopics.length > 0;
+
+  const teamCard = hasTeam ? `
+    <div class="stat team-stat">
+      <div class="who">
+        <span class="dot" style="background:${TEAM_MEMBER.color}"></span>
+        <div>
+          <div style="font-weight:700;font-size:14px">👥 الفريق كله</div>
+          <div class="lbl">مشترك بين الجميع</div>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div><div class="num">${teamDone}/${teamTasks.length}</div><div class="lbl">مهام مشتركة</div></div>
+        <div><div class="num">${teamTopicProg}%</div><div class="lbl">تقدم التعلم</div></div>
+      </div>
+      <div class="bar"><div style="width:${teamTasks.length ? Math.round(teamDone/teamTasks.length*100) : 0}%;background:${TEAM_MEMBER.color}"></div></div>
+      <div class="bar-label"><span>إنجاز المهام</span><b>${teamTasks.length ? Math.round(teamDone/teamTasks.length*100) : 0}%</b></div>
+    </div>` : '';
+
+  const memberCards = state.members.map(m => {
+    const mt = state.tasks.filter(t => t.member === m.id);
+    const md = mt.filter(t => t.status === 'done').length;
+    const tp = mt.length ? Math.round(md / mt.length * 100) : 0;
+    const lt = state.topics.filter(t => t.member === m.id);
+    const lp = lt.length ? Math.round(lt.reduce((s, t) => s + (+t.progress || 0), 0) / lt.length) : 0;
+    return `
+      <div class="stat">
+        <div class="who">
+          <span class="dot" style="background:${m.color}"></span>
+          <div>
+            <div style="font-weight:700;font-size:14px">${esc(m.name)}</div>
+            <div class="lbl">${esc(m.role || '')}</div>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div><div class="num">${md}/${mt.length}</div><div class="lbl">مهام منجزة</div></div>
+          <div><div class="num">${lp}%</div><div class="lbl">تقدم التعلم</div></div>
+        </div>
+        <div class="bar"><div style="width:${tp}%;background:${m.color}"></div></div>
+        <div class="bar-label"><span>إنجاز المهام</span><b>${tp}%</b></div>
+      </div>`;
+  }).join('');
+
+  $('#dStats').innerHTML = teamCard + memberCards;
+
+  const up = state.tasks.filter(t => t.status !== 'done' && t.due && daysLeft(t.due) <= 7)
+    .sort((a,b) => a.due.localeCompare(b.due));
+  $('#dUpcoming').innerHTML = up.length ? up.map(t => {
+    const dl = daysLeft(t.due), m = mem(t.member);
+    const isTeam = t.member === TEAM_ID;
+    return `<div class="row ${isTeam ? 'team-row' : ''}">
+      <span class="dot" style="background:${m.color}"></span>
+      <div class="body" onclick="openComments('${t.id}')">
+        <div class="title">${esc(t.title)}</div>
+        <div class="meta">
+          <span>${isTeam ? '👥' : ''} ${esc(m.name)}</span>
+          <span>${fmtDate(t.due)}</span>
+        </div>
+      </div>
+      <span class="badge ${dl < 0 ? 'b-late' : 'b-mid'}">${dl < 0 ? `متأخرة ${-dl}ي` : `${dl} يوم`}</span>
+    </div>`;
+  }).join('') : '<div class="empty">لا شيء قريب 👌</div>';
+}
+
+/* Calendar */
+let calMonth = new Date();
+let calSelectedDay = null;
+
+window.calNav = function(delta){
+  calMonth = new Date(calMonth.getFullYear(), calMonth.getMonth() + delta, 1);
+  calSelectedDay = null;
+  renderCalendar();
+};
+window.calToday = function(){
+  calMonth = new Date();
+  calSelectedDay = new Date().getDate();
+  renderCalendar();
+};
+window.calSelectDay = function(day){
+  calSelectedDay = (calSelectedDay === day) ? null : day;
+  renderCalendar();
+};
+
+function renderCalendar(){
+  ensureState();
+  const y = calMonth.getFullYear();
+  const m = calMonth.getMonth();
+  const monthNames = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  $('#calTitle').textContent = monthNames[m] + ' ' + y;
+
+  const dowNames = ['أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة','سبت'];
+  $('#calDOW').innerHTML = dowNames.map(d =>
+    `<div class="cal-dow">${d}</div>`).join('');
+
+  const firstDay = new Date(y, m, 1).getDay();
+  const totalDays = new Date(y, m+1, 0).getDate();
+  const prevMonthDays = new Date(y, m, 0).getDate();
+
+  const today = new Date();
+  const isThisMonth = today.getFullYear() === y && today.getMonth() === m;
+  const todayDate = today.getDate();
+
+  let html = '';
+
+  // Days from prev month
+  for(let i = firstDay - 1; i >= 0; i--){
+    const d = prevMonthDays - i;
+    html += `<div class="cal-cell other"><div class="cal-day-num">${d}</div></div>`;
+  }
+
+  // Days of current month
+  for(let d = 1; d <= totalDays; d++){
+    const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const dayTasks = state.tasks.filter(t => t.due === dateStr);
+    const isToday = isThisMonth && d === todayDate;
+    const isSelected = calSelectedDay === d;
+    const cls = ['cal-cell'];
+    if(isToday) cls.push('today');
+    if(isSelected) cls.push('selected');
+
+    const dots = dayTasks.map(t => {
+      const color = t.status === 'done' ? 'var(--ok)' :
+                    t.status === 'doing' ? 'var(--warn)' :
+                    (t.prio === 'high' ? 'var(--bad)' : t.prio === 'mid' ? '#fcd34d' : '#94a3b8');
+      return `<span class="cal-dot" style="background:${color}" title="${esc(t.title)}"></span>`;
+    }).join('');
+
+    html += `<div class="${cls.join(' ')}" onclick="calSelectDay(${d})">
+      <div class="cal-day-num">${d}${dayTasks.length ? ` · ${dayTasks.length}` : ''}</div>
+      <div class="cal-dots">${dots}</div>
+    </div>`;
+  }
+
+  // Fill remaining cells
+  const filled = firstDay + totalDays;
+  const remaining = (7 - (filled % 7)) % 7;
+  for(let i = 1; i <= remaining; i++){
+    html += `<div class="cal-cell other"><div class="cal-day-num">${i}</div></div>`;
+  }
+
+  $('#calGrid').innerHTML = html;
+
+  // Selected day tasks
+  if(calSelectedDay){
+    const dateStr = `${y}-${String(m+1).padStart(2,'0')}-${String(calSelectedDay).padStart(2,'0')}`;
+    const dayTasks = state.tasks.filter(t => t.due === dateStr);
+    $('#calDayTitle').textContent = `📋 مهام ${calSelectedDay} ${monthNames[m]}`;
+    const box = $('#calDayTasks');
+    if(!dayTasks.length){
+      box.innerHTML = '<div class="empty">لا توجد مهام في هذا اليوم</div>';
+    } else {
+      box.innerHTML = dayTasks.map(t => taskRowMini(t)).join('');
+    }
+  } else {
+    $('#calDayTitle').textContent = '📋 اختر يوماً من التقويم';
+    $('#calDayTasks').innerHTML = '<div class="empty">انقر على أي يوم لعرض مهامه</div>';
+  }
+}
+
+function taskRowMini(t){
+  const m = mem(t.member);
+  const isTeam = t.member === TEAM_ID;
+  return `<div class="row ${t.status === 'done' ? 'done' : ''} ${isTeam ? 'team-row' : ''}">
+    <div class="check ${t.status}" onclick="cycle('${t.id}')">${t.status === 'done' ? '✓' : t.status === 'doing' ? '●' : ''}</div>
+    <div class="body" onclick="openComments('${t.id}')">
+      <div class="title">${esc(t.title)}</div>
+      <div class="meta">
+        <span style="color:${m.color}">${isTeam ? '👥' : '●'} ${esc(m.name)}</span>
+        <span class="badge b-${t.prio}">${PRIO_TXT[t.prio] || ''}</span>
+        ${t.comments && t.comments.length ? `<span class="badge b-cmt">💬 ${t.comments.length}</span>` : ''}
+        ${t.attachments && t.attachments.length ? `<span class="badge b-att">📎 ${t.attachments.length}</span>` : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* Weekly Report */
+function renderReport(){
+  ensureState();
+  const now = Date.now();
+  const weekAgo = now - 7 * 864e5;
+
+  const doneThisWeek = state.tasks.filter(t => t.completedAt && t.completedAt >= weekAgo);
+  const createdThisWeek = state.tasks.filter(t => t.createdAt && t.createdAt >= weekAgo);
+  const overdue = state.tasks.filter(t => t.status !== 'done' && t.due && daysLeft(t.due) < 0);
+  const dueThisWeek = state.tasks.filter(t => t.due && t.status !== 'done' &&
+    (() => { const dl = daysLeft(t.due); return dl >= 0 && dl <= 7; })());
+
+  const teamDone = doneThisWeek.filter(t => t.member === TEAM_ID).length;
+  const teamCreated = createdThisWeek.filter(t => t.member === TEAM_ID).length;
+
+  const box = $('#reportContent');
+
+  const memberRows = state.members.map(m => {
+    const mDone = doneThisWeek.filter(t => t.member === m.id).length;
+    const mCreated = createdThisWeek.filter(t => t.member === m.id).length;
+    const mOverdue = overdue.filter(t => t.member === m.id).length;
+    return `<div class="attach-item">
+      <div class="attach-info">
+        <div style="font-weight:700;color:${m.color}">● ${esc(m.name)}</div>
+        <div class="attach-meta">
+          ✅ أنجز: ${mDone} · 📥 استلم: ${mCreated} ${mOverdue ? ` · ⚠️ متأخرة: ${mOverdue}` : ''}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  const doneList = doneThisWeek.sort((a,b) => b.completedAt - a.completedAt).map(t => {
+    const m = mem(t.member);
+    return `<div class="row">
+      <span class="dot" style="background:var(--ok)"></span>
+      <div class="body" onclick="openComments('${t.id}')">
+        <div class="title">${esc(t.title)}</div>
+        <div class="meta"><span>${esc(m.name)}</span><span>${fmtTime(t.completedAt)}</span></div>
+      </div>
+    </div>`;
+  }).join('') || '<div class="empty">لم تُنجز مهام هذا الأسبوع</div>';
+
+  const overdueList = overdue.sort((a,b) => a.due.localeCompare(b.due)).map(t => {
+    const m = mem(t.member);
+    return `<div class="row">
+      <span class="dot" style="background:var(--bad)"></span>
+      <div class="body" onclick="openComments('${t.id}')">
+        <div class="title">${esc(t.title)}</div>
+        <div class="meta"><span>${esc(m.name)}</span><span>${fmtDate(t.due)}</span></div>
+      </div>
+    </div>`;
+  }).join('') || '<div class="empty">لا مهام متأخرة 🎉</div>';
+
+  box.innerHTML = `
+    <div class="report-grid">
+      <div class="report-stat"><div class="num">${doneThisWeek.length}</div><div class="lbl">✅ مهام منجزة</div></div>
+      <div class="report-stat"><div class="num">${createdThisWeek.length}</div><div class="lbl">📥 مهام جديدة</div></div>
+      <div class="report-stat"><div class="num" style="color:var(--warn)">${dueThisWeek.length}</div><div class="lbl">⏰ تستحق قريباً</div></div>
+      <div class="report-stat"><div class="num" style="color:var(--bad)">${overdue.length}</div><div class="lbl">⚠️ متأخرة</div></div>
+    </div>
+
+    <div class="report-section">
+      <h3>📊 ملخص الفريق</h3>
+      ${teamCreated || teamDone ? `<div class="attach-item">
+        <div class="attach-info">
+          <div style="font-weight:700;color:${TEAM_MEMBER.color}">👥 الفريق كله</div>
+          <div class="attach-meta">✅ أنجز: ${teamDone} · 📥 استلم: ${teamCreated}</div>
+        </div>
+      </div>` : ''}
+      ${memberRows}
+    </div>
+
+    <div class="report-section">
+      <h3>✅ مهام أُنجزت هذا الأسبوع</h3>
+      ${doneList}
+    </div>
+
+    <div class="report-section">
+      <h3>⚠️ مهام متأخرة</h3>
+      ${overdueList}
+    </div>
+  `;
+}
+
+window.copyReport = function(){
+  const now = new Date();
+  const weekAgo = Date.now() - 7 * 864e5;
+  const doneThisWeek = state.tasks.filter(t => t.completedAt && t.completedAt >= weekAgo);
+  const createdThisWeek = state.tasks.filter(t => t.createdAt && t.createdAt >= weekAgo);
+  const overdue = state.tasks.filter(t => t.status !== 'done' && t.due && daysLeft(t.due) < 0);
+
+  let txt = `📊 التقرير الأسبوعي — ${state.goal.title}\n`;
+  txt += `📅 ${now.toLocaleDateString('ar-EG')}\n\n`;
+  txt += `✅ مهام منجزة: ${doneThisWeek.length}\n`;
+  txt += `📥 مهام جديدة: ${createdThisWeek.length}\n`;
+  txt += `⚠️ مهام متأخرة: ${overdue.length}\n\n`;
+
+  txt += `👥 حسب العضو:\n`;
+  state.members.forEach(m => {
+    const d = doneThisWeek.filter(t => t.member === m.id).length;
+    const c = createdThisWeek.filter(t => t.member === m.id).length;
+    txt += `• ${m.name}: أنجز ${d}، استلم ${c}\n`;
+  });
+
+  const teamDone = doneThisWeek.filter(t => t.member === TEAM_ID).length;
+  if(teamDone) txt += `• الفريق كله: أنجز ${teamDone}\n`;
+
+  if(doneThisWeek.length){
+    txt += `\n✨ المنجزات:\n`;
+    doneThisWeek.forEach(t => txt += `✓ ${t.title}\n`);
+  }
+  if(overdue.length){
+    txt += `\n⚠️ متأخرة:\n`;
+    overdue.forEach(t => txt += `! ${t.title} (${fmtDate(t.due)})\n`);
+  }
+
+  navigator.clipboard.writeText(txt).then(() => {
+    showToast('📋 تم نسخ التقرير', 'الصقه في واتساب للمشاركة', 'success');
+  }).catch(() => {
+    alert('تعذّر النسخ. إليك التقرير:\n\n' + txt);
+  });
+};
+
+/* Init */
+function renderAll(){
+  try{
+    ensureState();
+    fillSelects();
+    renderDash();
+    renderTasks();
+    renderLearn();
+    renderTeam();
+    renderCalendar();
+    renderReport();
+  }catch(e){ console.error('renderAll error:', e); }
+}
+
+initFirebase();
+</script>
+</body>
+</html>
